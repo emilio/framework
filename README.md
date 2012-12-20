@@ -6,11 +6,11 @@ Falta por mejorar, pero creo que su interfaz de acceso a la base de datos es gen
 Está inspirado en [Laravel](http://laravel.com), pero escrito completamente por [mí](http://emiliocobos.net).
 
 ## Características
----
+
 ### Modelo Vista Controlador
 Símplemente añade tus controladores a la carpeta *controllers*. El controlador por defecto es `Home_Controller` (que cargará las páginas en el inicio). La estructura del controlador sería así:
 
-```
+```php
 class Home_Controller {
 	// La página principal
 	public function action_index() {
@@ -63,7 +63,7 @@ Las vistas deben de ser alojadas en el directorio `views`.
 Proveo un meto muy similar a ActiveRecord de RoR
 
 #### Crea el modelo
-```
+```php
 // models/article.php
 class Article extends DBObject {
 	public static $table = 'mis_artículos';
@@ -73,7 +73,7 @@ class Article extends DBObject {
 ```
 
 #### Úsalo
-```
+```php
 // Obtener un objeto con los datos del post con id = 1
 $article = Article::get(1);
 
@@ -91,7 +91,7 @@ $articulos = Article::where('author_id', '=', 3)->and_where('article_title', 'LI
 Por defecto se usará `PATH_INFO` para las urls, pero se pueden hacer aún mejores usando `mod_rewrite` (o aún más complejas usando `$_GET`). Para editarlo cambia la configuración en `config.php`
 
 El constructor de las urls tendrá esto en cuenta, así que siempre es recomendable usarlo a la hora de obtener links.
-```
+```php
 Url::get(); // Home
 Url::current(); // Url actual (perfecto para link[rel="canonical"])
 Url::get('admin@edit', 43); // Controlador admin, action_edit, parámetros 43: /admin/edit/43
