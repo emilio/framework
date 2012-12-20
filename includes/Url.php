@@ -43,60 +43,10 @@ class Url {
 		return $url;
 	}
 	public function asset($path = '') {
-		return BASE_URL . 'assets/' . $path;
+		return BASE_URL . Config::get('path.assets_orig') . '/' . $path;
 	}
 
 	public function current() {
 		return CURRENT_URL;
 	}
-
 }
-/* CON ADMIN SEPARADO: 
-<?php
-class Url {
-	public static function get($action = null, $id = null, $extra_query = null) {
-		$url = BASE_URL;
-		$admin_action = null;
-		if( $action && ($admin_search = strpos($action, '@') )) {
-			$admin_action = substr($action, $admin_search + 1);
-			$action = 'admin';
-		}
-
-		if( $action === 'admin' ) {
-			$url = ADMIN_URL;
-			if( $admin_action ) {
-				$url .= '?action=' . trim($admin_action);
-			}
-			if( $id ) {
-				$url .= ((strpos($url, '?') !== false) ? '&' : '?') . 'poll=' . $id;
-			}
-			return $url;
-		}
-
-		if( PRETTY_URLS ) {
-			if( ! REWRITE_FOR_URLS ) {
-				$url .= 'index.php/';
-			}
-			if( $action ) {
-				$url .= $action . '/';
-
-				if( $id ) {
-					$url .= $id . '/';
-				}
-			}
-		} else {
-			if( $action ) {
-				$url .= '?action=' . $action;
-
-				if( $id ) {
-					$url .= '&poll=' . $id;
-				}
-			}
-		}
-		if( $extra_query ) {
-			$url .= ((strpos($url, '?') !== false ) ? '&' : '?' ) . $extra_query;
-		}
-		return $url;
-	}
-}
-*/

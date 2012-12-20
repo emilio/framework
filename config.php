@@ -21,7 +21,7 @@
 		 */
 		'url' => array(
 			'pretty' => true,
-			'rewrite' => false
+			'rewrite' => true
 		),
 
 		'path' => array(

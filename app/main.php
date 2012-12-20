@@ -12,8 +12,12 @@ spl_autoload_register(function($name) {
 
 if( Config::get('url.pretty') ) {
 	$path = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : null;
-	if( is_null($path) ) {
-		Redirect::to( Url::get(), 301 );
+	if( is_null($path) ){
+		if( ! Config::get('url.rewrite')) {
+			Redirect::to( Url::get(), 301 );
+		} else {
+			$path = '/';
+		}
 	}
 
 

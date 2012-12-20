@@ -21,6 +21,7 @@ class Config {
 
 		// Definimos algunas constantes importantes
 		foreach (array( 'includes', 'models', 'controllers', 'views', 'assets')  as $path) {
+			self::$config['path'][$path . '_orig'] = self::$config['path'][$path];
 			self::$config['path'][$path] = BASE_PATH . self::get('path.' . $path) . '/';
 		}
 
