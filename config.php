@@ -40,8 +40,4 @@
 		/*
 		 * Configuración extra aquí
 		 */
-		'admin' => array(
-			'user' => 'ecoal95',
-			'password' => '$2a$08$NVekmN7OH2ZO4HQJHuoY0eJ.SFh6NKhhOcUFd8s.C2StgKqO6KdPa'
-		)
 	);
