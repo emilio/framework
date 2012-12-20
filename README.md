@@ -79,7 +79,9 @@ $article = Article::get(1);
 
 // Ejecutar otro tipo de consulta sobre él (nótese que no usamos get sino find)
 /*
- * Sería lo mismo que `Article::delete(Article::get(1));` sólo que sólo hace una consulta a la base de datos
+ * Sería lo mismo que: 
+ * `Article::delete(Article::get(1));`
+ * sólo que sólo hace una consulta a la base de datos en vez de dos
  */
 Article::find(1)->delete();
 
@@ -104,7 +106,6 @@ Url::asset('js/script.js'); // Busca la url absoluta al archivo assets/js/script
 No te preocupes por qué clases se han incluido o no en el paquete. El framework se encargará de todo por tí. Símplemente asegúrate de llamar al archivo con el mismo nombre de la clase e incluirlo en `includes/`
 
 ## Empezar
----
 1- Edita config.php para configurar la base de datos
 2- Ya!, Creado la configuración, ya puedes escribir tus propios controladores... Prueba a editar controllers/home.php para crear tu página principal.
 
