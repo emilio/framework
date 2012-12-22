@@ -1,4 +1,9 @@
 <?php
+/*
+ * Definir la url base
+ */
+define('BASE_URL', 'http://' . $_SERVER['SERVER_NAME'] . str_replace($_SERVER['DOCUMENT_ROOT'], '', BASE_PATH));
+
 // Configurar el cargado automático de clases
 spl_autoload_register(function($name) {
 	if( file_exists($file = Config::get('path.includes') . $name . '.php') ) {
@@ -7,7 +12,6 @@ spl_autoload_register(function($name) {
 		include $file;
 	}
 });
-
 
 
 if( Config::get('url.pretty') ) {
@@ -44,8 +48,7 @@ if( Config::get('url.pretty') ) {
 		$args = array_filter(explode(';', $args));
 	}
 }
-// Definir la url actual
-define('CURRENT_URL', Url::get($controller . '@' . $action, $args));
+
 /*
  * Comprobación home
  */
@@ -60,6 +63,9 @@ if( ! $action ) {
 if( ! $args ) {
 	$args = array();
 }
+
+// Definir la url actual
+define('CURRENT_URL', Url::get($controller . '@' . $action, $args));
 
 $controller_path = Config::get('path.controllers');
 if( file_exists($controller_path . $controller . '.php') ) {
