@@ -1,9 +1,11 @@
 <?php
 class Response {
-	public function json($args, $echo = true) {
+	public function json($args, $callback = null, $echo = true) {
 		header('Content-Type: application/json');
 		$response = json_encode($args);
-
+		if( $callback ) {
+			$response = $callback . '(' . $response . ')';
+		}
 		if( $echo ) {
 			echo $response;
 		} else {
