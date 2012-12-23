@@ -17,7 +17,7 @@
 		public static $db;
 
 		// Allowed operators for where queries
-		public static $allowed_operators = array('=', '!=', '>', '<', 'IN', 'in', 'LIKE', 'like'); // In allows searching for different values: Users::where('id', 'IN', '1,2,3,4');
+		public static $allowed_operators = array('=', '!=', '>', '<', 'IN', 'LIKE', 'in', 'like'); // In allows searching for different values: Users::where('id', 'IN', '1,2,3,4');
 
 		public static $allowed_relations = array('WHERE', 'OR', 'AND');
 		public static $allowed_orders = array('DESC', 'ASC');
@@ -179,11 +179,31 @@
 				}
 
 				list($field, $operator, $value) = $where_querie;
+				$operator = strtoupper($operator);
 				if( ! in_array($operator, self::$allowed_operators) ) {
 					throw new Exception("Error al procesar la solicitud", 1);
 				}
-				$sql .= " $relation `$field`$operator:$field";
-				$values[':' . $field] = $value;
+				if( $operator === 'IN' ) {
+					if( ! is_array($value) ) {
+						$value = explode(',', $value);
+					}
+
+					$sql .= " $relation `$field` IN(";
+					$in_fields_count = 0;
+					foreach ($value as $in_value) {
+						$field_placeholder = ':' . $field . '_in_' . $in_fields_count;
+						if( $in_fields_count !== 0 ) {
+							$sql .= ',';
+						}
+						$sql.= $field_placeholder;
+						$values[$field_placeholder] = $in_value;
+						$in_fields_count ++;
+					}
+					$sql .= ')';
+				} else {
+					$sql .= " $relation `$field` $operator :$field";
+					$values[':' . $field] = $value;
+				}
 			}
 			if( $orderby ) {
 				if( in_array($orderby[1], self::$allowed_orders) ) {
@@ -193,6 +213,7 @@
 			if( $limit ) {
 				$sql .= sprintf(" LIMIT %d, %d", $limit[0], $limit[1]);
 			}
+
 			return array($sql, $values);
 		}
 		/*
@@ -281,5 +302,4 @@
 			$rows = self::$db->query("SELECT COUNT($field) FROM `$table`")->fetchColumn();
 			return intval($rows, 10);
 		}
-
 	}
