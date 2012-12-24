@@ -17,7 +17,7 @@
 		public static $db;
 
 		// Allowed operators for where queries
-		public static $allowed_operators = array('=', '!=', '>', '<', 'IN', 'LIKE', 'in', 'like'); // In allows searching for different values: Users::where('id', 'IN', '1,2,3,4');
+		public static $allowed_operators = array('=', '!=', '>', '<', '<=', '>=', 'BETWEEN', 'IN', 'LIKE'); // In allows searching for different values: Users::where('id', 'IN', '1,2,3,4');
 
 		public static $allowed_relations = array('WHERE', 'OR', 'AND');
 		public static $allowed_orders = array('DESC', 'ASC');
