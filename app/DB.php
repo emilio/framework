@@ -109,7 +109,7 @@
 
 			$statement->execute($fields);
 
-			if( ! strpos($columns, 'COUNT') ) {
+			if( false === strpos($columns, 'COUNT') ) {
 				return $statement->fetchAll(PDO::FETCH_CLASS, 'stdClass');
 			} else {
 				return intval($statement->fetchColumn(), 10);
