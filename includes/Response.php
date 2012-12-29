@@ -1,19 +1,24 @@
 <?php
 class Response {
-	public function json($args, $callback = null, $echo = true) {
-		header('Content-Type: application/json');
+	public static function json($args, $callback = null, $echo = true) {
 		$response = json_encode($args);
+
 		if( $callback ) {
+			header('Content-Type: text/javascript; charset=UTF-8');
 			$response = $callback . '(' . $response . ')';
+		} else {
+			header('Content-Type: application/json; charset=UTF-8');
 		}
+
 		if( $echo ) {
 			echo $response;
 		} else {
 			return $response;
 		}
+		
 		return true;
 	}
-	public function error($error_code = 404, $echo = false) {
+	public static function error($error_code = 404, $echo = false) {
 		$error_path = Config::get('path.views') . 'error/';
 		$response = null;
 		switch ($error_code) {

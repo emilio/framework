@@ -1,6 +1,6 @@
 <?php
 	class View {
-		public function make($param, $other_files = true,$echo = true) {
+		public static function make($param, $other_files = true,$echo = true) {
 			$template_path = Config::get('path.views');
 			$controller_path = $header_file = $main_file = $footer_file = null;
 			if( strpos($param, '.') ) {

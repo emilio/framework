@@ -42,11 +42,11 @@ class Url {
 		}
 		return $url;
 	}
-	public function asset($path = '') {
+	public static function asset($path = '') {
 		return BASE_URL . Config::get('path.assets_orig') . '/' . $path;
 	}
 
-	public function current() {
+	public static function current() {
 		return CURRENT_URL;
 	}
 }

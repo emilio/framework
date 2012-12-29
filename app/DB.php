@@ -26,7 +26,7 @@
 		 * @param string $option the option to be configured
 		 * @param string $value the value for the database
 		 */
-		public function config($option, $value = '')
+		public static function config($option, $value = '')
 		{
 			switch( $option )
 			{
@@ -51,7 +51,7 @@
 		/*
 		 * Connect to the database after configuration
 		 */
-		public function connect()
+		public static function connect()
 		{
 			self::$db = new PDO(self::$driver . ':host=' . self::$host . ';dbname=' . self::$dbname, self::$user, self::$password);
 			self::$db->query("SET NAMES 'utf8'");
@@ -62,7 +62,7 @@
 		 * @param string $table the table where the row is going to be inserted
 		 * @param array $arguments the field=>value of the new row
 		 */
-		public function create($table, $arguments)
+		public static function create($table, $arguments)
 		{
 			$sql = 'INSERT INTO ' . $table . ' (';
 			$fields = array();
@@ -95,7 +95,7 @@
 		 * @param string $operator an operator in self::$allowed_operators
 		 * @param mixed $value the value to look for
 		 */
-		public function select($table, $where_field = null, $columns = '*') {
+		public static function select($table, $where_field = null, $columns = '*') {
 			$fields = null;
 			$has_where_query = ! is_null($where_field);
 			$sql = "SELECT $columns FROM `$table`";
@@ -238,7 +238,7 @@
 		 * 
 		 * Because you've used 1 query instead of 2
 		 */
-		public function edit($table, $id_field, $data, $where_clauses) {
+		public static function edit($table, $id_field, $data, $where_clauses) {
 			$sql = "UPDATE `$table` SET ";
 			$params = array();
 
@@ -281,7 +281,7 @@
 		 * @param string $table
 		 * @param int $id id of the row
 		 */
-		public function delete($table, $where_clauses)
+		public static function delete($table, $where_clauses)
 		{
 			$sql = "DELETE FROM `$table`";
 
@@ -298,7 +298,7 @@
 		/*
 		 * Count the items in the DB
 		 */
-		public function count($table, $field) {
+		public static function count($table, $field) {
 			$rows = self::$db->query("SELECT COUNT($field) FROM `$table`")->fetchColumn();
 			return intval($rows, 10);
 		}
