@@ -1,7 +1,7 @@
 <?php
 class Config {
 	protected static $config;
-	public function init() {
+	public static function init() {
 		if( ! self::$config ) {
 			self::$config = (include BASE_PATH . 'config.php');
 		}
@@ -26,7 +26,7 @@ class Config {
 		}
 
 	}
-	public function get($key) {
+	public static function get($key) {
 		if( ! self::$config ) {
 			self::init();
 		}
