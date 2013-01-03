@@ -17,7 +17,7 @@
 		public static $db;
 
 		// Allowed operators for where queries
-		public static $allowed_operators = array('=', '!=', '>', '<', '<=', '>=', 'BETWEEN', 'IN', 'LIKE'); // In allows searching for different values: Users::where('id', 'IN', '1,2,3,4');
+		public static $allowed_operators = array('=', '!=', '>', '<', '<=', '>=', 'BETWEEN', 'NOT BETWEEN', 'IN', 'NOT IN', 'LIKE', 'NOT LIKE'); // In allows searching for different values: Users::where('id', 'IN', '1,2,3,4');
 
 		public static $allowed_relations = array('WHERE', 'OR', 'AND');
 		public static $allowed_orders = array('DESC', 'ASC');
@@ -76,7 +76,6 @@
 			$sql .= ':' . implode(', :', $fields) . ')';
 		
 			$statement = self::$db->prepare($sql);
-
 			try {
 				$statement->execute($values);
 				return self::$db->lastInsertId();
@@ -125,8 +124,10 @@
 		 *    array('AND', 'ip', '=', '173.26.0.1')
 		 * )
 		 */
-		private function make_where_querie($args = array(), $sql = ''){
+		private static function make_where_querie($args = array(), $sql = ''){
 			$count = 0;
+			$prepared_fields = 0;
+			$base_placeholder = 'prepared_field_';
 			$values = array();
 			$limit = null;
 			$orderby = null;
@@ -183,26 +184,32 @@
 				if( ! in_array($operator, self::$allowed_operators) ) {
 					throw new Exception("Error al procesar la solicitud", 1);
 				}
-				if( $operator === 'IN' ) {
+				if( $operator === 'IN' || $operator === 'NOT IN' ) {
 					if( ! is_array($value) ) {
 						$value = explode(',', $value);
 					}
 
-					$sql .= " $relation `$field` IN(";
+					$sql .= " $relation `$field` $operator(";
 					$in_fields_count = 0;
 					foreach ($value as $in_value) {
-						$field_placeholder = ':' . $field . '_in_' . $in_fields_count;
+						$field_placeholder = ':' . $base_placeholder . $prepared_fields++;
 						if( $in_fields_count !== 0 ) {
 							$sql .= ',';
 						}
 						$sql.= $field_placeholder;
 						$values[$field_placeholder] = $in_value;
+						$prepared_fields++;
 						$in_fields_count ++;
 					}
 					$sql .= ')';
+				} elseif ($operator === 'BETWEEN' || $operator === 'NOT BETWEEN'){
+
+					$sql .= "$relation `$field` $operator :$base_placeholder" . $prepared_fields . " AND :$base_placeholder" . $prepared_fields + 1;
+					$values[':' . $base_placeholder . $prepared_fields++] = $values[0];
+					$values[':' . $base_placeholder . $prepared_fields++] = $values[1];
 				} else {
-					$sql .= " $relation `$field` $operator :$field";
-					$values[':' . $field] = $value;
+					$sql .= " $relation `$field` $operator :$base_placeholder" . $prepared_fields;
+					$values[':' . $base_placeholder . $prepared_fields++] = $value;
 				}
 			}
 			if( $orderby ) {
