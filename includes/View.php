@@ -34,9 +34,13 @@
 
 
 			ob_start();
-				include $header_file;
+				if( $header_file ) {
+					include $header_file;
+				}
 				include $main_file;
-				include $footer_file;
+				if( $footer_file ) {
+					include $footer_file;
+				}
 			$view = ob_get_clean();
 			if( $echo ) {
 				echo $view;

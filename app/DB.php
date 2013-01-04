@@ -296,9 +296,6 @@
 
 			$statement = self::$db->prepare($sql);
 
-
-
-
 			return $statement->execute($fields);
 		}
 

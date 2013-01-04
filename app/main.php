@@ -2,7 +2,8 @@
 /*
  * Definir la url base
  */
-define('BASE_URL', 'http://' . $_SERVER['SERVER_NAME'] . str_replace($_SERVER['DOCUMENT_ROOT'], '', BASE_PATH));
+define('BASE_ABSOLUTE_URL', str_replace($_SERVER['DOCUMENT_ROOT'], '', BASE_PATH));
+define('BASE_URL', 'http://' . $_SERVER['SERVER_NAME'] . BASE_ABSOLUTE_URL);
 
 // Configurar el cargado automático de clases
 spl_autoload_register(function($name) {
@@ -15,7 +16,10 @@ spl_autoload_register(function($name) {
 
 
 if( Config::get('url.pretty') ) {
-	$path = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : null;
+	$path = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '/' . str_replace(array(
+																				BASE_ABSOLUTE_URL,
+																				(isset($_SERVER['QUERY_STRING']) ? '?' . $_SERVER['QUERY_STRING'] : null)
+																			), '', $_SERVER['REQUEST_URI']);
 	if( is_null($path) ){
 		if( ! Config::get('url.rewrite')) {
 			Redirect::to( Url::get(), 301 );
@@ -91,13 +95,13 @@ if( file_exists($controller_path . $controller . '.php') ) {
 unset($controller_path);
 
 
-
 if( method_exists($class, 'action_' . $action) ) {
 	define('PAGE_CONTROLLER', $controller);
 	define('PAGE_ACTION', $action);
-	
 	call_user_func_array(array($class, 'action_' . $action), $args);
 } else {
+	define('PAGE_CONTROLLER', 'home');
+	define('PAGE_ACTION', '404');
 	header("HTTP/1.1 404 Not Found");
 	View::make('error.404');
 };
