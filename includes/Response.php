@@ -18,8 +18,7 @@ class Response {
 		
 		return true;
 	}
-	public static function error($error_code = 404, $echo = false) {
-		$error_path = Config::get('path.views') . 'error/';
+	public static function error($error_code = 404, $echo = true) {
 		$response = null;
 		switch ($error_code) {
 			case 404:
@@ -29,16 +28,10 @@ class Response {
 				header('Status: HTTP 1.1 500 Internal Server Error');
 				break;
 		}
-		if( file_exists( $error_path . $error_code . '.php') ) {
-			ob_start();
-			include $error_path . $error_code . '.php';
-			$response = ob_get_clean();
+		if( ! defined('PAGE_CONTROLLER') ) {
+			define('PAGE_CONTROLLER', 'error');
+			define('PAGE_ACTION', $error_code);
 		}
-		if( $echo ) {
-			echo $response;
-		} else {
-			return $response;
-		}
-		return true;
+		return View::make('error.' . $error_code, $echo);
 	}
 }

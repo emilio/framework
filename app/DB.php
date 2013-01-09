@@ -203,10 +203,9 @@
 					}
 					$sql .= ')';
 				} elseif ($operator === 'BETWEEN' || $operator === 'NOT BETWEEN'){
-
-					$sql .= "$relation `$field` $operator :$base_placeholder" . $prepared_fields . " AND :$base_placeholder" . $prepared_fields + 1;
-					$values[':' . $base_placeholder . $prepared_fields++] = $values[0];
-					$values[':' . $base_placeholder . $prepared_fields++] = $values[1];
+					$sql .= "$relation `$field` $operator :$base_placeholder" . $prepared_fields . " AND :$base_placeholder" . ($prepared_fields + 1);
+					$values[':' . $base_placeholder . $prepared_fields++] = $value[0];
+					$values[':' . $base_placeholder . $prepared_fields++] = $value[1];
 				} else {
 					$sql .= " $relation `$field` $operator :$base_placeholder" . $prepared_fields;
 					$values[':' . $base_placeholder . $prepared_fields++] = $value;

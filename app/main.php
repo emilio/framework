@@ -94,14 +94,10 @@ if( file_exists($controller_path . $controller . '.php') ) {
 }
 unset($controller_path);
 
-
 if( method_exists($class, 'action_' . $action) ) {
 	define('PAGE_CONTROLLER', $controller);
 	define('PAGE_ACTION', $action);
 	call_user_func_array(array($class, 'action_' . $action), $args);
 } else {
-	define('PAGE_CONTROLLER', 'home');
-	define('PAGE_ACTION', '404');
-	header("HTTP/1.1 404 Not Found");
-	View::make('error.404');
+	return Response::error(404);
 };
