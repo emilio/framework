@@ -1,6 +1,6 @@
 <?php
 class Home_Controller {
-	public function action_index() {
-		View::make('home.index');
+	public static function action_index() {
+		return View::make('home.index');
 	}
 }

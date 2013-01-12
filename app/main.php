@@ -1,4 +1,11 @@
 <?php
+
+
+if( defined('DEVELOPEMENT_MODE') && DEVELOPEMENT_MODE ) {
+	error_reporting(E_ALL);
+	ini_set('display_errors', 1);
+}
+
 /*
  * Definir la url base
  */
@@ -91,8 +98,9 @@ if( file_exists($controller_path . $controller . '.php') ) {
 		$action = $controller;
 		$controller = 'home';
 	} else {
-		return Response::error(404);
-		exit;
+		$args = array($controller, $action);
+		$controller = 'home';
+		$action = 'index';
 	}
 }
 unset($controller_path);
@@ -102,9 +110,25 @@ if( method_exists($class, 'global') ) {
 }
 
 if( method_exists($class, 'action_' . $action) ) {
+	$reflection = new ReflectionMethod($class, 'action_' . $action);
+	$number_of_arguments = count($args);
+
+	// Si hay más argumentos de los esperados o menos de los requeridos, lanzamos un error 404
+	if( $number_of_arguments > $reflection->getNumberOfParameters() || $number_of_arguments < $reflection->getNumberOfRequiredParameters()) {
+		return Response::error(404)->render(true);
+	}
+
+	// Si no, lanzamos la aplicación
 	define('PAGE_CONTROLLER', $controller);
 	define('PAGE_ACTION', $action);
-	call_user_func_array(array($class, 'action_' . $action), $args);
+
+	$return = call_user_func_array(array($class, 'action_' . $action), $args);
+
+	if( $return instanceof View ) {
+		return $return->render(true);
+	}
+
+	echo $return;
 } else {
-	return Response::error(404);
+	return Response::error(404)->render(true);
 };

@@ -1,6 +1,8 @@
 <?php 
-	error_reporting( E_ALL );
 	session_start();
+
+	// Si es `true` se mostrarán errores, y si es `false` no
+	define('DEVELOPEMENT_MODE', true);
 
 	// Definir los directorios
 	if( ! defined('DIRECTORY_SEPARATOR') ) {

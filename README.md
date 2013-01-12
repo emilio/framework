@@ -13,19 +13,14 @@ Símplemente añade tus controladores a la carpeta *controllers*. El controlador
 ```php
 class Home_Controller {
 	// La página principal
-	public function action_index() {
+	public static function action_index() {
 		// Mostrará el archivo que se encuentra en views/home/index.php
 		// También incluirá header.php y footer.php si existen, siempre que no se especifice false como segundo argumento
 		Return View::make('home.index');
 	}
 
 	// Nos permitiría mostrar un artículo con una id (por ejemplo: /blog/123)
-	public function action_blog($id = null, $args = null) {
-		if( $args ) {
-			// Si la url es algo como  /blog/123/cualquiercosa
-			// Mandamos un 404
-			return Response::error(404);
-		}
+	public static function action_blog($id = null) {
 		if( $id && is_numeric($id) ){
 			// Article tiene que ser una clase definida en models (leer más abajo)
 			if($articulo = Article::get($id) ) {
@@ -43,7 +38,7 @@ class Home_Controller {
 	}
 
 	// Imaginemos un formulario de contacto: Se accedería por /contacto/
-	public function action_contacto() {
+	public static function action_contacto($args = null) {
 		if( $_SERVER['REQUEST_METHOD'] === 'POST' ) {
 			$headers = 'Mime-Type: 1.0' . "\r\n";
 			/* ... */
@@ -54,7 +49,7 @@ class Home_Controller {
 		return View::make('home.contacto');
 	}
 	// Ejemplo de una redirección fácil
-	public function action_redirect() {
+	public static function action_redirect() {
 		Redirect::to(Param::get('url'));// Sin estado
 		Redirect::to(Param::get('url'), 301);// Hacer una redirección 301
 	}
@@ -65,7 +60,7 @@ class Home_Controller {
 Las vistas deben de ser alojadas en el directorio `views`.
 
 ### Genial interacción con la Base de datos
-Proveo un meto muy similar a ActiveRecord de RoR
+Proveo un meto muy similar a ActiveRecord de *RoR*
 
 #### Crea el modelo
 ```php
@@ -109,6 +104,10 @@ Url::asset('js/script.js'); // Busca la url absoluta al archivo assets/js/script
 
 ### Auto carga de clases
 No te preocupes por qué clases se han incluido o no en el paquete. El framework se encargará de todo por tí. Símplemente asegúrate de llamar al archivo con el mismo nombre de la clase e incluirlo en `includes/`
+
+### Detección de errores 404
+Usamos `ReflectionClass` para comprobar que el número de argumentos esperados es el correcto.
+Así conseguimos detectar errores 404
 
 ## Empezar
 1- Edita config.php para configurar la base de datos

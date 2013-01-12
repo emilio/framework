@@ -18,20 +18,14 @@ class Response {
 		
 		return true;
 	}
-	public static function error($error_code = 404, $echo = true) {
-		$response = null;
-		switch ($error_code) {
-			case 404:
-				header('Status: HTTP 1.1 404 Not Found');
-				break;
-			case 500:
-				header('Status: HTTP 1.1 500 Internal Server Error');
-				break;
-		}
+
+	public static function error($error_code) {
+		Header::status($error_code);
+
 		if( ! defined('PAGE_CONTROLLER') ) {
 			define('PAGE_CONTROLLER', 'error');
 			define('PAGE_ACTION', $error_code);
 		}
-		return View::make('error.' . $error_code, $echo);
+		return View::make('error.' . $error_code);
 	}
 }
