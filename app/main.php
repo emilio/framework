@@ -2,7 +2,11 @@
 /*
  * Definir la url base
  */
-define('BASE_ABSOLUTE_URL', str_replace($_SERVER['DOCUMENT_ROOT'], '', BASE_PATH));
+if( '/' === DIRECTORY_SEPARATOR ) {
+	define('BASE_ABSOLUTE_URL', str_replace($_SERVER['DOCUMENT_ROOT'], '', BASE_PATH));
+} else {
+	define('BASE_ABSOLUTE_URL', str_replace(DIRECTORY_SEPARATOR, '/', str_replace($_SERVER['DOCUMENT_ROOT'], '', BASE_PATH)));
+}
 define('BASE_URL', 'http://' . $_SERVER['SERVER_NAME'] . BASE_ABSOLUTE_URL);
 
 // Configurar el cargado automático de clases

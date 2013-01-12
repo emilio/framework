@@ -3,7 +3,10 @@
 	session_start();
 
 	// Definir los directorios
-	define('BASE_PATH', dirname(__FILE__) . '/');
+	if( ! defined('DIRECTORY_SEPARATOR') ) {
+		define('DIRECTORY_SEPARATOR', '/');
+	}
+	define('BASE_PATH', dirname(__FILE__) . DIRECTORY_SEPARATOR);
 
 
 	/*
