@@ -26,7 +26,7 @@ if( Config::get('url.pretty') ) {
 																			), '', $_SERVER['REQUEST_URI']);
 	if( is_null($path) ){
 		if( ! Config::get('url.rewrite')) {
-			Redirect::to( Url::get(), 301 );
+			return Redirect::to( Url::get(), 301 );
 		} else {
 			$path = '/';
 		}
@@ -91,12 +91,15 @@ if( file_exists($controller_path . $controller . '.php') ) {
 		$action = $controller;
 		$controller = 'home';
 	} else {
-		header("HTTP/1.1 404 Not Found");
-		View::make('error.404');
+		return Response::error(404);
 		exit;
 	}
 }
 unset($controller_path);
+// Opcional una función global
+if( method_exists($class, 'global') ) {
+	call_user_func(array($class, 'global'));
+}
 
 if( method_exists($class, 'action_' . $action) ) {
 	define('PAGE_CONTROLLER', $controller);
