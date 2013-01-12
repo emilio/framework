@@ -64,6 +64,8 @@
 				}
 			}
 
+			extract($this->data);
+
 			ob_start();
 				if( $header_file ) {
 					include $header_file;

@@ -16,7 +16,7 @@ class Home_Controller {
 	public static function action_index() {
 		// Mostrará el archivo que se encuentra en views/home/index.php
 		// También incluirá header.php y footer.php si existen, siempre que no se especifice false como segundo argumento
-		Return View::make('home.index');
+		return View::make('home.index');
 	}
 
 	// Nos permitiría mostrar un artículo con una id (por ejemplo: /blog/123)
@@ -101,13 +101,71 @@ Url::get('blog', 1); // Busca el controlador Blog_Controller. Como no existe, en
 Url::get('blog', 1, 'preview=true'); // Añadir una query string a la url: /blog/1/?preview=true
 Url::asset('js/script.js'); // Busca la url absoluta al archivo assets/js/script.js
 ```
-
 ### Auto carga de clases
 No te preocupes por qué clases se han incluido o no en el paquete. El framework se encargará de todo por tí. Símplemente asegúrate de llamar al archivo con el mismo nombre de la clase e incluirlo en `includes/`
 
 ### Detección de errores 404
 Usamos `ReflectionClass` para comprobar que el número de argumentos esperados es el correcto.
-Así conseguimos detectar errores 404
+Así conseguimos detectar errores 404.
+
+### Manejo de archivos
+La versión dos incorpora un interesante manejador de archivos que te permitirá manejar los estilos que usa tu aplicación fácilmente.
+
+Por ejemplo:
+
+```php
+// controllers/home.php
+class Home_Controller {
+
+	/*
+	 * La función global se ejecutará si existe para todas las páginas que dependan de `Home_Controller`
+	 */
+	public static function global() {
+		// En todas queremos la hoja de estilos principal
+		Asset::enqueue_style('css/style.css');
+		// modernizr, por ejemplo
+		Asset::enqueue_script('js/modernizr.js');
+
+		// En el footer queremos jQuery
+		Asset::enqueue_script('//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js','footer');
+	}
+
+	// La página de inicio
+	public static function action_index() {
+		return View::make('home.index')
+			->add_var('title', 'Inicio'); // add_var nos permite usar $title en la página con en valor 'Inicio'
+	}
+
+	// En el contacto queremos un plugin de validación
+	public static function action_contacto() {
+		Asset::enqueue_script( 'js/jQuery.validation.min.js' ,'footer');
+		return View::make('home.contacto')
+			->add_var('title', 'Contacto');
+	}
+}
+```
+
+Luego en `views/home/header.php` o en su fallback (views/header.php) deberíamos de tener algo así:
+
+```html
+<!doctype html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<title><?php echo $title ?></title>
+
+	<?php Asset::print_styles('head'); ?>
+	<?php Asset::print_scripts('head'); ?>
+</head>
+<body>
+```
+
+Y en `footer.php`:
+```html
+<?php Asset::print_scripts('footer'); ?>
+</body>
+</html>
+```
 
 ## Empezar
 1- Edita config.php para configurar la base de datos

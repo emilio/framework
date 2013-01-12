@@ -23,7 +23,7 @@ class Asset {
 				'css' => array()
 			);
 		}
-		static::$enqueued[$container][$is_script ? 'js' : 'css'][] = (0 === strpos($src, 'http')) ? $src : Url::asset($src);
+		static::$enqueued[$container][$is_script ? 'js' : 'css'][] = (0 === strpos($src, 'http') || 0 === strpos($src, '//')) ? $src : Url::asset($src);
 	}
 
 	public static function enqueue_script($src, $container = 'head', $dependencies = null) {
