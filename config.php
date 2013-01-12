@@ -8,7 +8,7 @@
 			'host' => 'localhost',
 			'user' => 'root',
 			'password' => 'root',
-			'dbname' => 'polls'
+			'dbname' => 'social'
 		),
 
 		/*
@@ -34,8 +34,12 @@
 			'models' => 'models',
 			'controllers' => 'controllers',
 			'views' => 'views',
-			'assets' => 'assets'
+			'assets' => 'assets',
+			'cache' => 'cache'
 		),
+		'cache' => array(
+			'expires' => 3, // Expiración en días de los items de la caché
+		)
 
 		/*
 		 * Configuración extra aquí

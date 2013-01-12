@@ -20,7 +20,12 @@ class Home_Controller {
 	}
 
 	// Nos permitiría mostrar un artículo con una id (por ejemplo: /blog/123)
-	public function action_blog($id = null) {
+	public function action_blog($id = null, $args = null) {
+		if( $args ) {
+			// Si la url es algo como  /blog/123/cualquiercosa
+			// Mandamos un 404
+			return Response::error(404);
+		}
 		if( $id && is_numeric($id) ){
 			// Article tiene que ser una clase definida en models (leer más abajo)
 			if($articulo = Article::get($id) ) {
