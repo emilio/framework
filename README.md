@@ -24,10 +24,8 @@ class Home_Controller {
 		if( $id && is_numeric($id) ){
 			// Article tiene que ser una clase definida en models (leer más abajo)
 			if($articulo = Article::get($id) ) {
-				// Permitir el uso de $articulo en la vista
-				$GLOBALS['articulo'] = $articulo;
 				// Cargará la plantilla ubicada en /views/home/post-single.php
-				return View::make('home.post-single');
+				return View::make('home.post-single')->add_var('post', $articulo); // En la vista $post será lo mismo que $articulo en esta función
 			} else {
 				// Artículo no encontrado => cargará la plantilla views/error/404.php
 				return Response::error(404);
