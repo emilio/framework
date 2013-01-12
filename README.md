@@ -32,6 +32,9 @@ class Home_Controller {
 				// Artículo no encontrado => cargará la plantilla views/error/404.php
 				return Response::error(404);
 			}
+		} else {
+			// Si no es numérico => 404
+			return Response::error(404);
 		}
 		// La página del blog (/blog/)
 		return View::make('home.blog-index');
