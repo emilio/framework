@@ -20,10 +20,15 @@ class Config {
 		DB::connect();
 
 		// Definimos algunas constantes importantes
-		foreach (array( 'includes', 'models', 'controllers', 'views', 'assets')  as $path) {
+		foreach (array( 'cache','includes', 'models', 'controllers', 'views', 'assets')  as $path) {
 			self::$config['path'][$path . '_orig'] = self::$config['path'][$path];
 			self::$config['path'][$path] = BASE_PATH . self::get('path.' . $path) . '/';
 		}
+
+		Cache::configure(array(
+			'cache_path' => self::get('path.cache'),
+			'expires' => self::get('cache.expires')
+		));
 
 	}
 	public static function get($key) {
