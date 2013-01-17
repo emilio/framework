@@ -98,7 +98,11 @@ if( file_exists($controller_path . $controller . '.php') ) {
 		$action = $controller;
 		$controller = 'home';
 	} else {
-		$args = array($controller, $action);
+		if( $action !== 'index' ) {
+			$args = array($controller, $action);
+		} else {
+			$args = array($controller);
+		}
 		$controller = 'home';
 		$action = 'index';
 	}

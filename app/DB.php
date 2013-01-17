@@ -7,11 +7,13 @@
 	class DB {
 		// Conection drivers for the pdo
 		// Configuration via DB::config
-		private static $driver = 'mysql';
-		private static $dbname = '';
-		private static $host = 'localhost';
-		private static $user = '';
-		private static $password = '';
+		private static $config = array(
+			'driver' => 'mysql',
+			'host' => 'localhost',
+			'dbname' => '',
+			'user' => '',
+			'password' => ''
+		);
 
 		// The pdo instance
 		public static $db;
@@ -28,23 +30,10 @@
 		 */
 		public static function config($option, $value = '')
 		{
-			switch( $option )
-			{
-				case 'host':
-					self::$host = $value;
-					break;
-				case 'dbname':
-					self::$dbname = $value;
-					break;
-				case 'user':
-					self::$user = $value;
-					break;
-				case 'password':
-					self::$password = $value;
-					break;
-				case 'driver':
-					self::$driver = $value;
-					break;
+			if( is_array($option) ) {
+				static::$config = array_merge(static::$config, $option);
+			} else {
+				static::$config[$option] = $value;
 			}
 		}
 
@@ -53,7 +42,8 @@
 		 */
 		public static function connect()
 		{
-			self::$db = new PDO(self::$driver . ':host=' . self::$host . ';dbname=' . self::$dbname, self::$user, self::$password);
+			$config = static::$config;
+			self::$db = new PDO($config['driver'] . ':host=' . $config['host'] . ';dbname=' . $config['dbname'], $config['user'], $config['password']);
 			self::$db->query("SET NAMES 'utf8'");
 		}
 
@@ -64,7 +54,7 @@
 		 */
 		public static function create($table, $arguments)
 		{
-			$sql = 'INSERT INTO ' . $table . ' (';
+			$sql = 'INSERT INTO `' . $table . '` (';
 			$fields = array();
 			$values = array();
 			foreach ($arguments as $field => $value) {
@@ -108,13 +98,23 @@
 
 			$statement->execute($fields);
 
-			if( false === strpos($columns, 'COUNT') ) {
-				return $statement->fetchAll(PDO::FETCH_CLASS, 'stdClass');
-			} else {
-				return intval($statement->fetchColumn(), 10);
+			switch (substr($columns, 0, 4)) {
+				case 'COUN':
+				case 'MAX(':
+				case 'MIN(':
+					return intval($statement->fetchColumn(), 10);
+				break;
+				
+				default:
+					return $statement->fetchAll(PDO::FETCH_CLASS, 'stdClass');
 			}
+		}
 
-			return $results;
+		/*
+		 * Permitir seleccionar de una tabla estática
+		 */
+		public static function from_table($table) {
+			return new Query($table);
 		}
 
 		/*

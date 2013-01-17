@@ -59,6 +59,22 @@
 		}
 
 		/*
+		 * Get the max value of something
+		 * @return int
+		 */
+		public static function max($field) {
+			return self::query()->max($field);
+		}
+
+		/*
+		 * Get the min value of something
+		 * @return int
+		 */
+		public static function min($field) {
+			return self::query()->min($field);
+		}
+
+		/*
 		 * Perform a query without where clauses
 		 * Useful for limits and orders:
 		 * eg: last 5 created users
@@ -88,7 +104,7 @@
 		public static function all() {
 			return DB::select(static::$table);
 		}
-		
+
 		/*
 		 * Create a row with the fields named in $args
 		 * @param array|StdClass $args the fields and values to insert the database

@@ -2,7 +2,7 @@
 	class Query {
 		public $where_clauses = array();
 
-		public function __construct($table, $id_field) {
+		public function __construct($table, $id_field = 'id') {
 			$this->table = $table;
 			$this->id_field = $id_field;
 		}
@@ -33,13 +33,21 @@
 
 		public function get($fields = '*') {
 			if( is_array($fields) ) {
-				$fields = '`' . implode('`, `', $fields) . '`';
+				$fields = $this->table . '.`' . implode('`, ' . $this->table . '`', $fields) . '`';
 			}
 			return DB::select($this->table, $this->where_clauses, $fields);
 		}
 
 		public function count($field = '*') {
 			return  $this->get('COUNT(' . ($field === '*' ? $field : '`' . $field . '`') . ')');
+		}
+
+		public function min($field) {
+			return  $this->get('MIN(`' . $field . '`)');
+		}
+
+		public function max($field) {
+			return  $this->get('MAX(`' . $field . '`)');
 		}
 
 		public function delete() {
