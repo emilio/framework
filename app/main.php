@@ -16,21 +16,21 @@ if( '/' === DIRECTORY_SEPARATOR ) {
 }
 define('BASE_URL', 'http://' . $_SERVER['SERVER_NAME'] . BASE_ABSOLUTE_URL);
 
-// Configurar el cargado automático de clases
-spl_autoload_register(function($name) {
-	if( file_exists($file = Config::get('path.includes') . $name . '.php') ) {
-		include $file;
-	} elseif (file_exists($file = Config::get('path.models') . strtolower($name) . '.php' ) ) {
-		include $file;
-	}
-});
-
-
 if( Config::get('url.pretty') ) {
-	$path = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '/' . str_replace(array(
-																				BASE_ABSOLUTE_URL,
-																				(isset($_SERVER['QUERY_STRING']) ? '?' . $_SERVER['QUERY_STRING'] : null)
-																			), '', $_SERVER['REQUEST_URI']);
+	if( isset($_SERVER['PATH_INFO']) ) {
+		$path = $_SERVER['PATH_INFO'];
+	} else {
+		$path = $_SERVER['REQUEST_URI'];
+		if( isset($_SERVER['QUERY_STRING']) ) {
+			$path = str_replace('?' . $_SERVER['QUERY_STRING'], '', $path);
+		}
+
+		if( $path === BASE_ABSOLUTE_URL ) {
+			$path = '/';
+		} else {
+			$path = substr($path, strlen(BASE_ABSOLUTE_URL));
+		}
+	}
 	if( is_null($path) ){
 		if( ! Config::get('url.rewrite')) {
 			return Redirect::to( Url::get(), 301 );
@@ -108,10 +108,6 @@ if( file_exists($controller_path . $controller . '.php') ) {
 	}
 }
 unset($controller_path);
-// Opcional una función global
-if( method_exists($class, 'global') ) {
-	call_user_func(array($class, 'global'));
-}
 
 if( method_exists($class, 'action_' . $action) ) {
 	$reflection = new ReflectionMethod($class, 'action_' . $action);
@@ -125,6 +121,11 @@ if( method_exists($class, 'action_' . $action) ) {
 	// Si no, lanzamos la aplicación
 	define('PAGE_CONTROLLER', $controller);
 	define('PAGE_ACTION', $action);
+
+	// Opcional una función global
+	if( method_exists($class, 'all') ) {
+		call_user_func(array($class, 'all'));
+	}
 
 	$return = call_user_func_array(array($class, 'action_' . $action), $args);
 

@@ -121,7 +121,7 @@ class Home_Controller {
 	/*
 	 * La función global se ejecutará si existe para todas las páginas que dependan de `Home_Controller`
 	 */
-	public static function global() {
+	public static function all() {
 		// En todas queremos la hoja de estilos principal
 		Asset::enqueue_style('css/style.css');
 		// modernizr, por ejemplo
