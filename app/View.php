@@ -1,4 +1,5 @@
 <?php namespace EC;
+	use EC\Event;
 	class View {
 		public $data = array();
 		public $include_other_files = true;
@@ -63,7 +64,7 @@
 				if( DEVELOPEMENT_MODE || $controller === 'error') {
 					throw new Exception("Vista no encontrada: " . $main_file, 1);
 				} else {
-					return Response::error(500);
+					return Event::trigger('error.500');
 				}
 			}
 
@@ -87,6 +88,6 @@
 		}
 
 		public static function make($param, $other_files = true) {
-			return new static($param, $other_files);
+			return new self($param, $other_files);
 		}
 	}
