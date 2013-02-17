@@ -60,6 +60,8 @@
 			'Cache'  => 'EC\\Storage\\Cache',
 			'Cookie' => 'EC\\Storage\\Cookie',
 
+			'App'        => 'EC\\App',
+			'Config'     => 'EC\\Config',
 			'Hash'       => 'EC\\Hash',
 			'Asset'      => 'EC\\Asset',
 			'Event'      => 'EC\\Event',
