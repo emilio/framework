@@ -4,11 +4,11 @@
 	// Si es `true` se mostrarán errores, y si es `false` no
 	define('DEVELOPEMENT_MODE', false);
 
+	// Abreviar DIRECTORY_SEPARATOR
+	define('DS', DIRECTORY_SEPARATOR);
+
 	// Definir los directorios
-	if( ! defined('DIRECTORY_SEPARATOR') ) {
-		define('DIRECTORY_SEPARATOR', '/');
-	}
-	define('BASE_PATH', dirname(__FILE__) . DIRECTORY_SEPARATOR);
+	define('BASE_PATH', dirname(__FILE__) . DS);
 
 
 	/*
@@ -17,5 +17,4 @@
 
 
 	// Incluir el archivo que procesará la aplicación
-	require BASE_PATH . 'app/config.php';
-	require BASE_PATH . 'app/main.php';
+	include BASE_PATH . 'app/start.php';

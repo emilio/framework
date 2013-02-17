@@ -35,11 +35,38 @@
 			'controllers' => 'controllers',
 			'views' => 'views',
 			'assets' => 'assets',
-			'cache' => 'cache'
+			'cache' => 'storage/cache',
+			'logs' => 'storage/logs',
 		),
+
 		'cache' => array(
 			'expires' => 3, // Expiración en días de los items de la caché
-		)
+		),
+
+		// Las clases que estarán disponibles globalmente sin tener que usar el namespace
+		'aliases' => array(
+			'DB'       => 'EC\\Database\\DB',
+			'DBObject' => 'EC\\Database\\DBObject',
+			'Query'    => 'EC\\Database\\Query',
+			
+			'Url'      => 'EC\\HTTP\\Url',
+			'Redirect' => 'EC\\HTTP\\Redirect',
+			'Response' => 'EC\\HTTP\\Response',
+			'Header'   => 'EC\\HTTP\\Header',
+			'Param'    => 'EC\\HTTP\\Param',
+
+
+			'Log'    => 'EC\\Storage\\Log',
+			'Cache'  => 'EC\\Storage\\Cache',
+			'Cookie' => 'EC\\Storage\\Cookie',
+
+			'Hash'       => 'EC\\Hash',
+			'Asset'      => 'EC\\Asset',
+			'Event'      => 'EC\\Event',
+			'File'       => 'EC\\File',
+			'View'       => 'EC\\View',
+			'Autoloader' => 'EC\\Autoloader',
+		),
 
 		/*
 		 * Configuración extra aquí
