@@ -12,6 +12,7 @@ use EC\Database\DB;
 
 	// Iniciar la autocarga de clases y registrar nuestro namespace
 	include 'Autoloader.php';
+
 	Autoloader::add_namespace('EC', BASE_PATH . 'app/');
 	Autoloader::register();
 
@@ -22,25 +23,22 @@ use EC\Database\DB;
 	Autoloader::defaultPath(Config::get('path.includes'));
 	Autoloader::$aliases = Config::get('aliases');
 
+	// iniciar los eventos
+	include BASE_PATH . 'events.php';
+	
+
+
 	// Conectamos con la base de datos
 	DB::config(Config::get('database'));
-	try {
-		DB::connect();
-	} catch (Exception $e) {
-		Event::trigger('db.connect_error', $e);
-	}
+	DB::connect();
 
 	// Cargar los modelos automáticamente
 	foreach (glob(Config::get('path.models') . '*.php', GLOB_NOSORT) as $file) {
 		require $file;
 	}
 
-
 	// Iniciarlo todo
 	App::start();
-
-	// iniciar los eventos
-	include BASE_PATH . 'events.php';
 
 	// Y mostrarlo
 	App::render();

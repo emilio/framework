@@ -51,7 +51,13 @@ use PDO, Exception, PDOException;
 		public static function connect()
 		{
 			$config = self::$config;
-			self::$db = new PDO($config['driver'] . ':host=' . $config['host'] . ';dbname=' . $config['dbname'], $config['user'], $config['password']);
+			try {
+				self::$db = new PDO($config['driver'] . ':host=' . $config['host'] . ';dbname=' . $config['dbname'], $config['user'], $config['password']);
+			} catch( PDOException $e ) {
+				Event::trigger('db.connect_error', $e);
+				// No podemos continuar sin la bd
+				die();
+			}
 			self::$db->query("SET NAMES 'utf8'");
 		}
 

@@ -49,6 +49,7 @@ class Event {
 			$name = 'globals';
 		}
 
+
 		if( ! isset(self::$listeners[$name]) || ! isset(self::$listeners[$name][$event]) ) {
 			return;
 		}
