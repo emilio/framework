@@ -1,4 +1,5 @@
 <?php namespace EC;
+use EC\HTTP\Url;
 /**
  * Class for script/styles management
  */
