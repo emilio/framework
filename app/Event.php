@@ -40,6 +40,9 @@ class Event {
 	 * @return void
 	 */
 	public static function trigger($event, $args = array()) {
+		if( ! is_array($args) ) {
+			$args = array($args);
+		}
 		if( strpos($event, '.') ) {
 			list($name, $event) = explode('.', $event);
 		} else {
@@ -57,9 +60,7 @@ class Event {
 		$args['event'] = $event;
 
 		foreach (self::$listeners[$name][$event] as $callback) {
-			call_user_func($callback['callback'], $args);
+			call_user_func_array($callback['callback'], $args);
 		}
 	}
-
-
 }

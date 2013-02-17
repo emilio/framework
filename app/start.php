@@ -24,7 +24,11 @@ use EC\Database\DB;
 
 	// Conectamos con la base de datos
 	DB::config(Config::get('database'));
-	DB::connect();
+	try {
+		DB::connect();
+	} catch (Exception $e) {
+		Event::trigger('db.connect_error', $e);
+	}
 
 	// Cargar los modelos automáticamente
 	foreach (glob(Config::get('path.models') . '*.php', GLOB_NOSORT) as $file) {
