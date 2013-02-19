@@ -64,11 +64,14 @@ class Autoloader {
 			// Get the namespace
 			$namespace = substr($class, 0, $namespace_pos);
 			$class = ltrim(substr($class, $namespace_pos), '\\');
-			if( isset(self::$namespaces[$namespace]) ) {
-				$namespace = self::$namespaces[$namespace];
-			} else {
-				$namespace = self::$default_namespace;
+			if( ! isset(self::$namespaces[$namespace]) ) {
+				self::$namespaces[$namespace] = array(
+					'path' => self::$default_namespace['path'] . $namespace . '/',
+					'separator' => self::$default_namespace['separator'],
+					'extension' => self::$default_namespace['extension']
+				);
 			}
+			$namespace = self::$namespaces[$namespace];
 		} else {
 			$namespace = self::$default_namespace;
 		}
