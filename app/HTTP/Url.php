@@ -49,7 +49,7 @@ class Url {
 			}
 		}
 		if( $extra_query ) {
-			$url .= ((strpos($url, '?') !== false ) ? '&' : '?' ) . is_array($extra_query) ? http_build_query($extra_query) : $extra_query;
+			$url .= ((strpos($url, '?') !== false ) ? '&' : '?' ) . (is_array($extra_query) ? http_build_query($extra_query) : $extra_query);
 		}
 		return $url;
 	}

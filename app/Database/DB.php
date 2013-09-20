@@ -1,5 +1,5 @@
 <?php namespace EC\Database;
-use PDO, Exception, PDOException;
+use PDO, Exception, PDOException, EC\Event;
 	/**
 	 * Database class for data manipulation
 	 *

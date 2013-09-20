@@ -77,7 +77,7 @@ class Header {
 	 * @param string $type
 	 * @return void
 	 */
-	public static function content_type($type) {
+	public static function contentType($type) {
 		header('Content-Type: ' . $type);
 	}
 }

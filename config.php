@@ -1,5 +1,6 @@
 <?php
 	return array(
+		'db_required' => false, // Si no hace falta conectar con una bd nos ahorramos tiempo
 		/*
 		 * Configuración requerida
 		 */
@@ -8,7 +9,7 @@
 			'host' => 'localhost',
 			'user' => 'root',
 			'password' => 'root',
-			'dbname' => 'social'
+			'dbname' => 'db'
 		),
 
 		/*
@@ -54,6 +55,7 @@
 			'Response' => 'EC\\HTTP\\Response',
 			'Header'   => 'EC\\HTTP\\Header',
 			'Param'    => 'EC\\HTTP\\Param',
+			'Curl'     => 'EC\\HTTP\\Curl',
 
 
 			'Log'    => 'EC\\Storage\\Log',
